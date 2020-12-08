@@ -34,5 +34,3 @@ if not os.path.exists(profiles_path):
 
 # Add ability to read from pandas
 pd.read_snowflake = SnowflakeReader.read
-
-print(pd.read_snowflake(database = 'TEST_DB', schema = 'PANDAS_CLOUDY_TEST', table = 'TO_SNOWFLAKE_TEST').head())

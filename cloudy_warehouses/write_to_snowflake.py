@@ -47,6 +47,3 @@ def write_pandas_dataframe(connection, df, database, schema, table_name):
     success, nchunks, nrows, _ = write_pandas(connection, df, table_name)
 
     return success
-
-df = pd.DataFrame.from_dict({'V': ['something to test']})
-df.cloudy_warehouses.write(database = 'TEST_DB', schema = 'PANDAS_CLOUDY_TEST', table_name = 'TO_SNOWFLAKE_TEST')
