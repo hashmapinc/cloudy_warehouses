@@ -1,9 +1,0 @@
-README.md
-setup.py
-cloudy_warehouses/__init__.py
-cloudy_warehouses/read_from_snowflake.py
-cloudy_warehouses/write_to_snowflake.py
-cloudy_warehouses.egg-info/PKG-INFO
-cloudy_warehouses.egg-info/SOURCES.txt
-cloudy_warehouses.egg-info/dependency_links.txt
-cloudy_warehouses.egg-info/top_level.txt
