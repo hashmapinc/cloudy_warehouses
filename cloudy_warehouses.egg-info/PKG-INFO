@@ -1,0 +1,15 @@
+Metadata-Version: 1.2
+Name: cloudy-warehouses
+Version: 0.0.2.7
+Summary: DO NOT USE - This is a sample program
+Home-page: https://github.com/hashmapinc/sales-and-marketing/pocs/sam-kohlleffel-poc/pandas-cloudy-extension
+Author: Hashmap, Inc
+Author-email: accelerators@hashmapinc.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 1 - Pre-Alpha
+Requires-Python: >=3.7
