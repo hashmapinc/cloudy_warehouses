@@ -13,9 +13,8 @@ class SnowflakeWriter:
     def __init__(self, df: pd.DataFrame):
             self.df = df
 
-
     # Uploads data from a pandas dataframe to an existing Snowflake table
-    def write(self, database: str, schema: str, table_name: str, sf_username: str=None, sf_password: str=None, sf_account: str=None):
+    def write_snowflake(self, database: str, schema: str, table_name: str, sf_username: str=None, sf_password: str=None, sf_account: str=None):
 
         # calls method to configure Snowflake credentials
         sf_credentials = self.configure_credentials(
@@ -33,7 +32,7 @@ class SnowflakeWriter:
             schema = schema
             )
         
-         # calls method to write data in a pandas dataframe to an existing Snowflake table
+        # calls method to write data in a pandas dataframe to an existing Snowflake table
         self.write_success = self.write_pandas_dataframe(
                     connection = connection,
                     df = self.df,
@@ -43,11 +42,10 @@ class SnowflakeWriter:
                     )
 
         if self.write_success:
-            return print("successfully wrote to Snowflake Table")
+            return "successfully wrote to Snowflake Table"
         
         else:
-            return print("not successful")
-
+            return "not successful"
 
     # configures Snowflake credentials
     def configure_credentials(self, sf_username: str=None, sf_password: str=None, sf_account: str=None):
@@ -69,7 +67,6 @@ class SnowflakeWriter:
                 }
         
         return sf_credentials
-    
 
     # establishes a connection with snowflake
     def get_snowflake_connection(self, user, pswd, acct, database=None, schema=None):
@@ -83,7 +80,6 @@ class SnowflakeWriter:
         )
 
         return connection
-
 
     # writes data from a pandas dataframe to a Snowflake table
     def write_pandas_dataframe(self, connection, df, database, schema, table_name):

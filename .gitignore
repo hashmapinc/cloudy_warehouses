@@ -1,2 +1,5 @@
 .vscode
 venv
+dist
+cloudy_warehouses.egg-info
+__pycache__
