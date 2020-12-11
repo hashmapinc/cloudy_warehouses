@@ -1,0 +1,12 @@
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE
+
+include:
+
+  - project: 'hashmapinc/ctso/internal_dry_repositories/docker_cicd'
+    ref: master
+    file: '/docker-build.gitlab-ci.yml'
+
+  - project: 'hashmapinc/ctso/internal_dry_repositories/project_management_cicd'
+    ref: master
+    file: '/pypi-release-pipeline.gitlab-ci.yml'
