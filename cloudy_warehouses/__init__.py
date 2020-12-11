@@ -4,7 +4,6 @@ import yaml
 import pandas as pd
 from cloudy_warehouses.read_from_snowflake import SnowflakeReader
 from cloudy_warehouses.write_to_snowflake import SnowflakeWriter
-from cloudy_warehouses.list_snowflake_tables import SnowflakeLister
 
 
 if not os.getenv('CLOUDY_HOME'):
@@ -35,5 +34,5 @@ if not os.path.exists(profiles_path):
 
 
 # Add ability to read from pandas
-pd.read_snowflake = SnowflakeReader.read
-pd.list_snowflake_tables = SnowflakeLister.list_tables
+pd.read_snowflake = SnowflakeReader().read
+pd.list_snowflake_tables = SnowflakeReader().list_tables
