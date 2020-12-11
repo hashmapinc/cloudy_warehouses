@@ -50,3 +50,13 @@ class SnowflakeWriter(SnowflakeObject):
         success, nchunks, nrows, _ = write_pandas(connection, df, table_name)
 
         return success
+
+    def create_snowflake_table(self, connection, database, schema, table):
+        try:
+            cursor = connection.cursor()
+            cursor.execute(f'select * from {database}.{schema}.{table}')
+            df = cursor.fetch_pandas_all()
+        finally:
+            cursor.close()
+
+        return df

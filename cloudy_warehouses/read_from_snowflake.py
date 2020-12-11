@@ -1,4 +1,3 @@
-import yaml, os
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
 from snowflake import connector
 
