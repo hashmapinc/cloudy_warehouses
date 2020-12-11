@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="cloudy_warehouses",
-    version="0.0.2.7",
+    version="0.0.3.0",
     author="Hashmap, Inc",
     author_email="accelerators@hashmapinc.com",
     description="DO NOT USE - This is a sample program",
@@ -11,6 +11,12 @@ setuptools.setup(
     package_data={
         "cloudy_warehouses.configurations": ["default_configuration_profiles.yml"],
     },
+    install_requires=[
+        'pyarrow==0.17.1',
+        'pandas==1.1.4',
+        'pyyaml==5.3.1',
+        'snowflake-connector-python==2.3.6'
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
