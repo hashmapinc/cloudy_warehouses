@@ -2,9 +2,9 @@ import platform
 import os
 import yaml
 import pandas as pd
-from cloudy_warehouses.read_from_snowflake import SnowflakeReader
-from cloudy_warehouses.write_to_snowflake import SnowflakeWriter
-
+from cloudy_warehouses.from_snowflake import SnowflakeReader
+from cloudy_warehouses.to_snowflake import SnowflakeWriter
+from cloudy_warehouses.copy_snowflake import SnowflakeCopier
 
 if not os.getenv('CLOUDY_HOME'):
     if platform.system().lower() != 'windows':
@@ -35,4 +35,12 @@ if not os.path.exists(profiles_path):
 
 # Add ability to read from pandas
 pd.read_snowflake = SnowflakeReader().read
+
+# Add ability to list from pandas
 pd.list_snowflake_tables = SnowflakeReader().list_tables
+
+# Add ability to copy from pandas
+pd.clone_snowflake = SnowflakeCopier().clone
+
+# Add ability to copy empty from pandas
+pd.clone_empty_snowflake = SnowflakeCopier().clone_empty

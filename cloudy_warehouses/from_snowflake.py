@@ -1,5 +1,4 @@
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
-from snowflake import connector
 
 
 # Reads from Snowflake and returns pandas dataframe
@@ -57,6 +56,7 @@ class SnowflakeReader(SnowflakeObject):
             cursor.execute(f'select * from {database}.{schema}.{table}')
             df = cursor.fetch_pandas_all()
         finally:
+            connection.close()
             cursor.close()
 
         return df
@@ -70,6 +70,7 @@ class SnowflakeReader(SnowflakeObject):
                 f"SELECT TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME FROM {database}.INFORMATION_SCHEMA.TABLES;")
             tables = cursor.fetch_pandas_all()
         finally:
+            connection.close()
             cursor.close()
 
         return tables
