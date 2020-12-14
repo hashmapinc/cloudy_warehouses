@@ -16,3 +16,13 @@ class TestWriteSnowflake(unittest.TestCase):
             df,
             pd.DataFrame
         )
+
+    def test_list_snowflake(self):
+        df = pd.list_snowflake_tables(
+            database='TEST_DB'
+        )
+
+        self.assertIsInstance(
+            df,
+            pd.DataFrame
+        )

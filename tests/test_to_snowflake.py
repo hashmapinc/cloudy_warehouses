@@ -38,3 +38,4 @@ class TestWriteSnowflake(unittest.TestCase):
             expected_return_statement,
             return_statement
         )
+
