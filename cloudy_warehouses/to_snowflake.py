@@ -6,7 +6,7 @@ from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
 
 @pd.api.extensions.register_dataframe_accessor("cloudy_warehouses")
 class SnowflakeWriter(SnowflakeObject):
-    """Writer Object: contains write_snowflake and create_snowflake methods"""
+    """Writer Object: contains write_snowflake and create_snowflake methods."""
 
     # True when write_snowflake successfully runs
     write_success = False
@@ -24,7 +24,7 @@ class SnowflakeWriter(SnowflakeObject):
 
     def write_snowflake(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None,
                         sf_account: str = None):
-        """Uploads data from a pandas dataframe to an existing Snowflake table"""
+        """Uploads data from a pandas dataframe to an existing Snowflake table."""
 
         try:
             # initialize Snowflake connection and configure credentials
@@ -62,7 +62,7 @@ class SnowflakeWriter(SnowflakeObject):
 
     def create_snowflake(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None,
                          sf_account: str = None):
-        """method that creates a Snowflake table and writes pandas dataframe to table"""
+        """method that creates a Snowflake table and writes pandas dataframe to table."""
 
         try:
             # initialize Snowflake connection and configure credentials

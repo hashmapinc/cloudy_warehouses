@@ -4,7 +4,7 @@ import logging
 
 # Copier Object
 class SnowflakeCopier(SnowflakeObject):
-    """Class that holds the clone and clone_empty methods"""
+    """Class that holds the clone and clone_empty methods."""
 
     # sql that is run by the cursor object
     sql_statement = str
@@ -15,7 +15,7 @@ class SnowflakeCopier(SnowflakeObject):
 
     def clone(self, database: str, schema: str, new_table: str, source_table: str, source_database: str = None,
               source_schema: str = None, sf_username: str = None, sf_password: str = None, sf_account: str = None):
-        """method that creates a copy of a Snowflake table"""
+        """method that creates a copy of a Snowflake table."""
         try:
             # initialize Snowflake connection and configure credentials
             self.initialize_snowflake(
@@ -71,7 +71,7 @@ class SnowflakeCopier(SnowflakeObject):
     def clone_empty(self, database: str, schema: str, new_table: str, source_table: str, source_database: str = None,
                     source_schema: str = None, sf_username: str = None, sf_password: str = None,
                     sf_account: str = None):
-        """method that creates an empty copy of a Snowflake table"""
+        """method that creates an empty copy of a Snowflake table."""
 
         try:
             # initialize Snowflake connection and configure credentials

@@ -4,7 +4,7 @@ import cloudy_warehouses
 
 
 class TestWriteSnowflake(unittest.TestCase):
-    """unittests for SnowflakeWriter"""
+    """Unittests for SnowflakeWriter."""
 
     def test_write_snowflake(self):
 

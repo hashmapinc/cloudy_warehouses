@@ -3,7 +3,7 @@ import logging
 
 
 class SnowflakeReader(SnowflakeObject):
-    """Contains read and list_tables methods"""
+    """Contains read and list_tables methods."""
 
     # instance of python logger
     _logger = logging.getLogger()
@@ -11,7 +11,7 @@ class SnowflakeReader(SnowflakeObject):
     log_message = str
 
     def read(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None, sf_account: str = None):
-        """reads a table from Snowflake and returns a pandas dataframe of that table"""
+        """reads a table from Snowflake and returns a pandas dataframe of that table."""
 
         try:
             # configure and connect to Snowflake
@@ -50,7 +50,7 @@ class SnowflakeReader(SnowflakeObject):
         return df
 
     def list_tables(self, database: str, sf_username: str = None, sf_password: str = None, sf_account: str = None):
-        """lists all tables in the specified Snowflake database. The list is returned as a pandas dataframe"""
+        """lists all tables in the specified Snowflake database. The list is returned as a pandas dataframe."""
 
         try:
             # configure and connect to Snowflake
@@ -86,7 +86,7 @@ class SnowflakeReader(SnowflakeObject):
         return df
 
     def get_pandas_dataframe(self, connection, database, schema, table):
-        """reads data from a Snowflake table as a pandas dataframe"""
+        """Reads data from a Snowflake table as a pandas dataframe."""
         self.cursor = connection.cursor()
         self.cursor.execute(f'select * from {database}.{schema}.{table}')
         df = self.cursor.fetch_pandas_all()
@@ -94,7 +94,7 @@ class SnowflakeReader(SnowflakeObject):
         return df
 
     def get_snowflake_tables(self, connection, database):
-        """reads data from a Snowflake table as a pandas dataframe"""
+        """Reads data from a Snowflake table as a pandas dataframe."""
         self.cursor = connection.cursor()
         self.cursor.execute(
             f"SELECT TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME FROM {database}.INFORMATION_SCHEMA.TABLES;")

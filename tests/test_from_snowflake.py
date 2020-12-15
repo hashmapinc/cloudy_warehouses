@@ -4,7 +4,7 @@ import cloudy_warehouses
 
 
 class TestReadSnowflake(unittest.TestCase):
-    """unittests for SnowflakeReader"""
+    """Unittests for SnowflakeReader."""
 
     def test_read_snowflake(self):
         df = pd.read_snowflake(

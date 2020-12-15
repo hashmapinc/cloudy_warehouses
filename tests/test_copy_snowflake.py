@@ -4,7 +4,7 @@ import cloudy_warehouses
 
 
 class TestCopySnowflake(unittest.TestCase):
-    """unittests for SnowflakeCopier"""
+    """Unittests for SnowflakeCopier."""
 
     # tests for successful clone
     def test_clone_snowflake(self):
