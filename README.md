@@ -115,13 +115,18 @@ pandas.clone_snowflake(database: str,
                        schema: str,
                        new_table: str,
                        source_table: str,
+                       source_schema: str = None,
+                       source_database: str = None,
                        sf_username: str = None,
                        sf_password: str = None,
                        sf_account: str = None
                        )           
 ```
 This method creates a clone of an existing Snowflake table. The `new_table` variable is the new table that will
-be created after the method is called. The `source_table` variable is the existing Snowflake table that is being cloned. 
+be created after the method is called. The `source_table` variable is the existing Snowflake table that is being cloned.
+The optional `source_database` and `source_schema` variables are the database and schema in which the `source_table` resides.
+If you plan to clone an existing table from the schema and database that the `new_table` will reside in, you do not need to 
+include `source_database` and `source_schema` variables.
 You can use the configuration file or pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
 ### Creating an empty clone of an existing Snowflake table
@@ -130,6 +135,8 @@ pandas.clone_empty_snowflake(database: str,
                              schema: str,
                              new_table: str,
                              source_table: str,
+                             source_schema: str = None,
+                             source_database: str = None,
                              sf_username: str = None,
                              sf_password: str = None,
                              sf_account: str = None
@@ -138,6 +145,9 @@ pandas.clone_empty_snowflake(database: str,
 This method creates an empty clone of an existing Snowflake table. This means that of the columns from the `source_table`
 are copied into the `new_table`, but the `new_table` does not have any data within its columns. The `new_table` variable is the new table that will
 be created after the method is called. The `source_table` variable is the existing Snowflake table that is being cloned. 
+The optional `source_database` and `source_schema` variables are the database and schema in which the `source_table` resides.
+If you plan to clone an existing table from the schema and database that the `new_table` will reside in, you do not need to 
+include `source_database` and `source_schema` variables.
 You can use the configuration file or pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
 ## Examples
@@ -181,14 +191,17 @@ pd.clone_snowflake(
     database='SNOWFLAKE_DATABASE', 
     schema='SNOWFLAKE_SCHEMA',
     new_table='SNOWFLAKE_TABLE',
-    source_table='SNOWFLAKE_TABLE_TO_BE_CLONED'
+    source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
+    source_schema='SNOWFLAKE_SCHEMA_THAT_HOLDS_THE_SOURCE_TABLE'
     )
 
 pd.clone_empty_snowflake(
     database='SNOWFLAKE_DATABASE', 
     schema='SNOWFLAKE_SCHEMA',
     new_table='SNOWFLAKE_TABLE',
-    source_table='SNOWFLAKE_TABLE_TO_BE_CLONED'
+    source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
+    source_schema='SNOWFLAKE_SCHEMA_THAT_HOLDS_THE_SOURCE_TABLE',
+    source_database='SNOWFLAKE_DATABASE_THAT_HOLDS_THE_SOURCE_SCHEMA'
     )
 ```
 
@@ -246,6 +259,8 @@ pd.clone_snowflake(
     schema='SNOWFLAKE_SCHEMA',
     new_table='SNOWFLAKE_TABLE',
     source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
+    source_schema='SNOWFLAKE_SCHEMA_THAT_HOLDS_THE_SOURCE_TABLE',
+    source_database='SNOWFLAKE_DATABASE_THAT_HOLDS_THE_SOURCE_SCHEMA',
     sf_username='my_snowflake_username', 
     sf_password='my_snowflake_password', 
     sf_account='my_snowflake_account'
