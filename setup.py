@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cloudy_warehouses",
-    version="0.0.3.5",
+    version="0.0.3.6",
     author="Hashmap, Inc",
     author_email="accelerators@hashmapinc.com",
     description="DO NOT USE - This is a sample program",
