@@ -3,7 +3,8 @@ import pandas as pd
 import cloudy_warehouses
 
 
-class TestWriteSnowflake(unittest.TestCase):
+class TestReadSnowflake(unittest.TestCase):
+    """unittests for SnowflakeReader"""
 
     def test_read_snowflake(self):
         df = pd.read_snowflake(
