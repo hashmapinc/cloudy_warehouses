@@ -1,49 +1,21 @@
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
+import logging
 
 
 # Copier Object
 class SnowflakeCopier(SnowflakeObject):
-    initialized = False
-    sf_credentials = None
-    connection = None
+    """Class that holds the clone and clone_empty methods"""
+
+    # sql that is run by the cursor object
     sql_statement = str
+    # instance of python logger
+    _logger = logging.getLogger()
+    # logger message
+    log_message = str
 
-    # method that creates Snowflake connection and configures Snowflake credentials
-    def initialize_snowflake(self,
-                             database: str,
-                             schema: str,
-                             sf_username: str = None,
-                             sf_password: str = None,
-                             sf_account: str = None):
-
-        if not self.initialized:
-            # calls method to configure Snowflake credentials
-            self.sf_credentials = self.configure_credentials(
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account
-            )
-
-            # calls method to connect to Snowflake using the sf_credentials variable
-            self.connection = self.get_snowflake_connection(
-                user=self.sf_credentials['user'],
-                pswd=self.sf_credentials['pass'],
-                acct=self.sf_credentials['acct'],
-                database=database,
-                schema=schema
-            )
-        self.initialized = True
-
-    # method that creates a copy of a Snowflake table
-    def clone(self,
-             database: str,
-             schema: str,
-             new_table: str,
-             source_table: str,
-             sf_username: str = None,
-             sf_password: str = None,
-             sf_account: str = None):
-
+    def clone(self, database: str, schema: str, new_table: str, source_table: str, source_database: str = None,
+              source_schema: str = None, sf_username: str = None, sf_password: str = None, sf_account: str = None):
+        """method that creates a copy of a Snowflake table"""
         try:
             # initialize Snowflake connection and configure credentials
             self.initialize_snowflake(
@@ -54,29 +26,52 @@ class SnowflakeCopier(SnowflakeObject):
                 sf_account=sf_account
             )
 
-            # sql statement to be executed in Snowflake
-            self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} CLONE {source_table}"
+            # build sql statement to be executed by the cursor object
+            if source_database and source_schema:
+                self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} CLONE " \
+                                     f"{source_database}.{source_schema}.{source_table}"
+
+            elif source_schema and not source_database:
+                self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} CLONE " \
+                                     f"{source_schema}.{source_table}"
+
+            elif not source_schema and not source_database:
+                self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} CLONE " \
+                                     f"{source_table}"
+
+            else:
+                self.log_message = "Error: please call this method with viable values. Example: If you call this " \
+                                   "method with the 'source_database' parameter, " \
+                                   "you must include a 'source_schema' parameter as well"
+                self._logger.error(self.log_message)
+                return False
 
             # execute sql statement
-            cursor = self.connection.cursor()
-            cursor.execute(self.sql_statement)
+            self.cursor = self.connection.cursor()
+            self.cursor.execute(self.sql_statement)
+
+        # catch and log error
+        except Exception as e:
+            self.log_message = e
+            self._logger.error(self.log_message)
+            return False
 
         finally:
             # close connection and cursor
-            self.connection.close()
-            cursor.close()
+            if self.connection:
+                self.connection.close()
+            if self.cursor:
+                self.cursor.close()
 
-        return "successfully created a Snowflake Table copy"
+        # log successful clone
+        self.log_message = f"Successfully cloned {source_table} into {database}.{schema}.{new_table}"
+        self._logger.info(self.log_message)
+        return True
 
-    # method that creates an empty copy of a Snowflake table
-    def clone_empty(self,
-                    database: str,
-                    schema: str,
-                    new_table: str,
-                    source_table: str,
-                    sf_username: str = None,
-                    sf_password: str = None,
+    def clone_empty(self, database: str, schema: str, new_table: str, source_table: str, source_database: str = None,
+                    source_schema: str = None, sf_username: str = None, sf_password: str = None,
                     sf_account: str = None):
+        """method that creates an empty copy of a Snowflake table"""
 
         try:
             # initialize Snowflake connection and configure credentials
@@ -88,16 +83,45 @@ class SnowflakeCopier(SnowflakeObject):
                 sf_account=sf_account
             )
 
-            # sql statement to be executed in Snowflake
-            self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} LIKE {source_table}"
+            # build sql statement to be executed by the cursor object
+            if source_database and source_schema:
+                self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} LIKE " \
+                                     f"{source_database}.{source_schema}.{source_table}"
+
+            elif source_schema and not source_database:
+                self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} LIKE " \
+                                     f"{source_schema}.{source_table}"
+
+            elif not source_schema and not source_database:
+                self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{new_table} LIKE " \
+                                     f"{source_table}"
+
+            else:
+                self.log_message = "Error: please call this method with viable values. Example: If you call this " \
+                                   "method with the 'source_database' parameter, " \
+                                   "you must include a 'source_schema' parameter as well"
+                self._logger.error(self.log_message)
+                return False
 
             # execute sql statement
-            cursor = self.connection.cursor()
-            cursor.execute(self.sql_statement)
+            self.cursor = self.connection.cursor()
+            self.cursor.execute(self.sql_statement)
+
+        # catch and log error
+        except Exception as e:
+            self.log_message = e
+            self._logger.error(self.log_message)
+            return False
 
         finally:
             # close connection and cursor
-            self.connection.close()
-            cursor.close()
+            if self.connection:
+                self.connection.close()
+            if self.cursor:
+                self.cursor.close()
 
-        return "successfully created an empty Snowflake Table"
+        # log successful clone
+        self.log_message = f"Successfully cloned an empty version of {source_table} into " \
+                           f"{database}.{schema}.{new_table}"
+        self._logger.info(self.log_message)
+        return True

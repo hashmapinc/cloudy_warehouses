@@ -1,57 +1,30 @@
 import pandas as pd
+import logging
 from snowflake.connector.pandas_tools import write_pandas
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
 
 
-# Writer Object
 @pd.api.extensions.register_dataframe_accessor("cloudy_warehouses")
 class SnowflakeWriter(SnowflakeObject):
+    """Writer Object: contains write_snowflake and create_snowflake methods"""
 
+    # True when write_snowflake successfully runs
     write_success = False
-    initialized = False
-    sf_credentials = None
-    connection = None
+    # cursor executes this in create_snowflake method
     sql_statement = str
+    # used in as columns in create_snowflake method
     table_columns = []
+    # instance of python logger
+    _logger = logging.getLogger()
+    # logger message
+    log_message = str
 
     def __init__(self, df: pd.DataFrame):
         self.df = df
 
-    # method that creates Snowflake connection and configures Snowflake credentials
-    def initialize_snowflake(self,
-                             database: str,
-                             schema: str,
-                             sf_username: str=None,
-                             sf_password: str=None,
-                             sf_account: str=None):
-
-        if not self.initialized:
-
-            # calls method to configure Snowflake credentials
-            self.sf_credentials = self.configure_credentials(
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account
-            )
-
-            # calls method to connect to Snowflake using the sf_credentials variable
-            self.connection = self.get_snowflake_connection(
-                user=self.sf_credentials['user'],
-                pswd=self.sf_credentials['pass'],
-                acct=self.sf_credentials['acct'],
-                database=database,
-                schema=schema
-            )
-        self.initialized = True
-
-    # Uploads data from a pandas dataframe to an existing Snowflake table
-    def write_snowflake(self,
-                        database: str,
-                        schema: str,
-                        table: str,
-                        sf_username: str=None,
-                        sf_password: str=None,
-                        sf_account: str=None):
+    def write_snowflake(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None,
+                        sf_account: str = None):
+        """Uploads data from a pandas dataframe to an existing Snowflake table"""
 
         try:
             # initialize Snowflake connection and configure credentials
@@ -71,23 +44,25 @@ class SnowflakeWriter(SnowflakeObject):
                         )
             self.write_success = success
 
+        # catch and log error
+        except Exception as e:
+            self.log_message = e
+            self._logger.error(self.log_message)
+            return False
+
         finally:
-            self.connection.close()
+            # close connection
+            if self.connection:
+                self.connection.close()
 
         if self.write_success:
-            return "successfully wrote to Snowflake Table"
+            self.log_message = f"Successfully wrote to the {table} Snowflake table"
+            self._logger.error(self.log_message)
+            return True
 
-        else:
-            return "not successful"
-
-    # method that creates a Snowflake table and writes pandas dataframe to table
-    def create_snowflake(self,
-                         database: str,
-                         schema: str,
-                         table: str,
-                         sf_username: str=None,
-                         sf_password: str=None,
-                         sf_account: str=None):
+    def create_snowflake(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None,
+                         sf_account: str = None):
+        """method that creates a Snowflake table and writes pandas dataframe to table"""
 
         try:
             # initialize Snowflake connection and configure credentials
@@ -109,8 +84,8 @@ class SnowflakeWriter(SnowflakeObject):
             self.sql_statement = f"CREATE OR REPLACE TABLE {database}.{schema}.{table}({''.join(self.table_columns)})"
 
             # execute sql statement
-            cursor = self.connection.cursor()
-            cursor.execute(self.sql_statement)
+            self.cursor = self.connection.cursor()
+            self.cursor.execute(self.sql_statement)
 
             # calls method to write data in a pandas dataframe to an existing Snowflake table
             success, nchunks, nrows, _ = write_pandas(
@@ -119,9 +94,19 @@ class SnowflakeWriter(SnowflakeObject):
                 table_name=table
             )
 
+        # catch and log error
+        except Exception as e:
+            self.log_message = e
+            self._logger.error(self.log_message)
+            return False
+
         finally:
             # close connection and cursor
-            self.connection.close()
-            cursor.close()
+            if self.connection:
+                self.connection.close()
+            if self.cursor:
+                self.cursor.close()
 
-        return "successfully created and wrote to Snowflake Table"
+        self.log_message = f"Successfully created and wrote to the {table} Snowflake table"
+        self._logger.error(self.log_message)
+        return True
