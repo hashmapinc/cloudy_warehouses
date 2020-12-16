@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.3.8",
     author="Hashmap, Inc",
     author_email="accelerators@hashmapinc.com",
-    description="DO NOT USE - This is a sample program",
+    description="Cloudy Warehouses allows for stream-lined interaction between pandas and cloud data platform providers",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/hashmapinc/sales-and-marketing/pocs/sam-kohlleffel-poc/pandas-cloudy-extension",

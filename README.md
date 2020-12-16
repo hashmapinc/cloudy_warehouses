@@ -83,7 +83,7 @@ pandas.list_snowflake_tables(database: str,
 This method returns all of the tables in a Snowflake database as a pandas DataFrame. 
 There is an option to pass arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
-### Writing to an existing Snowflake table
+### Writing to a Snowflake table
 ```python
 pandas.DataFrame.cloudy_warehouses.write_snowflake(database: str,
                                                    schema: str, 
@@ -93,21 +93,10 @@ pandas.DataFrame.cloudy_warehouses.write_snowflake(database: str,
                                                    sf_account: str=None
                                                    )
 ```
-This method writes to an existing Snowflake table and informs you on success. Like the read_snowflake method, write_snowflake uses your Snowflake credentials stored in the configuration file.
+This method writes to a Snowflake table and informs you on success. This method works when writing to either an existing Snowflake table or a previously non-existing Snowflake table. 
+If the table that you provide does not exist, this method creates a new Snowflake table and writes to it. 
+Like the read_snowflake method, write_snowflake uses your Snowflake credentials stored in the configuration file.
 However, you can pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake as well.
-
-### Creating a new Snowflake table from a pandas dataframe
-```python
-pandas.DataFrame.cloudy_warehouses.create_snowflake(database: str,
-                                                    schema: str, 
-                                                    table: str, 
-                                                    sf_username: str=None, 
-                                                    sf_password: str=None, 
-                                                    sf_account: str=None
-                                                    )
-```
-This method creates a new Snowflake table from a pandas dataframe. It uses the column names of the pandas dataframe as the columns in the 
-new Snowflake table. It then writes the data of the pandas dataframe to the newly created Snowflake table. You can use the configuration file or pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
 ### Creating a clone of an existing Snowflake table
 ```python
@@ -174,18 +163,12 @@ df_read_from_snowflake = pd.read_snowflake(
     )
 ```
 
-__Creating, Cloning, and Empty Cloning (using configuration file)__
+__Cloning and Empty Cloning (using configuration file)__
 ```python
 import pandas as pd 
 import cloudy_warehouses
 
 df = pd.DataFrame.from_dict({'COL_1': ['hello', 'there'], 'COL_2': [10, 20], 'COL_3': [10, 20]})
-
-df.cloudy_warehouses.create_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA', 
-    table='SNOWFLAKE_TABLE'
-    )
 
 pd.clone_snowflake(
     database='SNOWFLAKE_DATABASE', 
@@ -238,21 +221,12 @@ df_read_from_snowflake = pd.read_snowflake(
     )
 ```
 
-__Creating, Cloning, and Empty Cloning (using optional Snowflake credentials arguments)__
+__Cloning and Empty Cloning (using optional Snowflake credentials arguments)__
 ```python
 import pandas as pd 
 import cloudy_warehouses
 
 df = pd.DataFrame.from_dict({'COL_1': ['hello', 'there'], 'COL_2': [10, 20], 'COL_3': [10, 20]})
-
-df.cloudy_warehouses.create_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA', 
-    table='SNOWFLAKE_TABLE',
-    sf_username='my_snowflake_username', 
-    sf_password='my_snowflake_password', 
-    sf_account='my_snowflake_account'
-    )
 
 pd.clone_snowflake(
     database='SNOWFLAKE_DATABASE', 
