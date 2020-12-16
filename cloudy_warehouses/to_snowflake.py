@@ -14,10 +14,6 @@ class SnowflakeWriter(SnowflakeObject):
     sql_statement = str
     # used in as columns in create_snowflake method
     table_columns = []
-    # instance of python logger
-    _logger = logging.getLogger()
-    # logger message
-    log_message = str
 
     def __init__(self, df: pd.DataFrame):
         self.df = df

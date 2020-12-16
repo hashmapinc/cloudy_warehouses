@@ -5,11 +5,6 @@ import logging
 class SnowflakeReader(SnowflakeObject):
     """Contains read and list_tables methods."""
 
-    # instance of python logger
-    _logger = logging.getLogger()
-    # logger message
-    log_message = str
-
     def read(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None, sf_account: str = None):
         """reads a table from Snowflake and returns a pandas dataframe of that table."""
 

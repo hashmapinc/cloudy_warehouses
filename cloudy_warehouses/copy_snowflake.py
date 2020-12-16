@@ -8,10 +8,6 @@ class SnowflakeCopier(SnowflakeObject):
 
     # sql that is run by the cursor object
     sql_statement = str
-    # instance of python logger
-    _logger = logging.getLogger()
-    # logger message
-    log_message = str
 
     def clone(self, database: str, schema: str, new_table: str, source_table: str, source_database: str = None,
               source_schema: str = None, sf_username: str = None, sf_password: str = None, sf_account: str = None):
