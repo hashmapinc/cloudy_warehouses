@@ -20,7 +20,10 @@ setuptools.setup(
         'pyarrow==0.17.1',
         'pandas==1.1.4',
         'pyyaml==5.3.1',
-        'snowflake-connector-python==2.3.6'
+        'snowflake-connector-python==2.3.6',
+        'snowflake-sqlalchemy==1.2.4',
+        'SQLAlchemy==1.3.20'
+
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
