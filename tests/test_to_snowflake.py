@@ -9,7 +9,7 @@ class TestWriteSnowflake(unittest.TestCase):
 
     def test_write_snowflake(self):
 
-        df = pd.DataFrame.from_dict({'COL_1': ['hello', 'there'], 'COL_2': ['general', 'hello'], 'COL_3': ['general', 'hello']})
+        df = pd.DataFrame.from_dict({'COL_1': ['hello', 'there'], 'COL_2': ['general', 'hello']})
 
         mock_write_snowflake = mock.create_autospec(df.cloudy_warehouses.write_snowflake, return_value=True)
 
