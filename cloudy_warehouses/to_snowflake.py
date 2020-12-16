@@ -1,8 +1,6 @@
 import pandas as pd
-import logging
 from snowflake.sqlalchemy import URL
 from sqlalchemy import create_engine
-from snowflake.connector.pandas_tools import write_pandas
 from snowflake.connector.pandas_tools import pd_writer
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
 
@@ -43,6 +41,7 @@ class SnowflakeWriter(SnowflakeObject):
             ))
 
             # calls method to write data in a pandas dataframe to an existing Snowflake table
+            # will create a new snowflake table if the given table name does not exist
             self.df.to_sql(name=table, con=self.engine, index=False, if_exists='append', method=pd_writer)
 
             self.write_success = True
@@ -65,46 +64,3 @@ class SnowflakeWriter(SnowflakeObject):
             self._logger.error(self.log_message)
             return True
 
-    def create_snowflake(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None,
-                         sf_account: str = None):
-        """method that creates a Snowflake table and writes pandas dataframe to table."""
-
-        try:
-            # initialize Snowflake connection and configure credentials
-            self.initialize_snowflake(
-                             database=database,
-                             schema=schema,
-                             sf_username=sf_username,
-                             sf_password=sf_password,
-                             sf_account=sf_account
-                             )
-
-            # create SQL Alchemy engine
-            self.engine = create_engine(URL(
-                user=self.sf_credentials['user'],
-                password=self.sf_credentials['pass'],
-                account=self.sf_credentials['acct'],
-                database=database,
-                schema=schema
-            ))
-
-            # calls method to write data in a pandas dataframe to a newly created Snowflake table
-            # will fail if table already exists
-            self.df.to_sql(name=table, con=self.engine, index=False, method=pd_writer)
-
-        # catch and log error
-        except Exception as e:
-            self.log_message = e
-            self._logger.error(self.log_message)
-            return False
-
-        finally:
-            # close connection and cursor
-            if self.connection:
-                self.connection.close()
-            if self.engine:
-                self.engine.dispose()
-
-        self.log_message = f"Successfully created and wrote to the {table} Snowflake table"
-        self._logger.error(self.log_message)
-        return True

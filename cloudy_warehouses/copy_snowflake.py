@@ -1,5 +1,4 @@
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
-import logging
 
 
 # Copier Object
