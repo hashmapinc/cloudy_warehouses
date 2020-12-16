@@ -62,7 +62,7 @@ class SnowflakeObject:
                                    f"as arguments when calling this method."
                 self._logger.error(self.log_message)
                 self.sf_credentials = None
-                return
+                return False
 
         else:
             # uses passed in variables as Snowflake credentials
@@ -72,16 +72,23 @@ class SnowflakeObject:
                 'acct': sf_account
             }
 
-        return
+        return True
 
     def get_snowflake_connection(self, user, pswd, acct, database=None, schema=None):
         """establishes a connection with snowflake"""
-        self.connection = connector.connect(
-            user=user,
-            password=pswd,
-            account=acct,
-            database=database,
-            schema=schema
-        )
+        try:
+            self.connection = connector.connect(
+                user=user,
+                password=pswd,
+                account=acct,
+                database=database,
+                schema=schema
+            )
 
-        return
+        # catch and log error
+        except Exception as e:
+            self.log_message = e
+            self._logger.error(self.log_message)
+            return False
+
+        return True
