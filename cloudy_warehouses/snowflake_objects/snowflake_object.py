@@ -32,7 +32,6 @@ class SnowflakeObject:
                 sf_password=sf_password,
                 sf_account=sf_account
             )
-
             # calls method to connect to Snowflake using the sf_credentials variable
             self.get_snowflake_connection(
                 user=self.sf_credentials['user'],
@@ -41,6 +40,7 @@ class SnowflakeObject:
                 database=database,
                 schema=schema
             )
+
         self.initialized = True
 
     def configure_credentials(self, sf_username: str = None, sf_password: str = None, sf_account: str = None):
