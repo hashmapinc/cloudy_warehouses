@@ -1,6 +1,9 @@
 import pandas as pd
 import logging
+from snowflake.sqlalchemy import URL
+from sqlalchemy import create_engine
 from snowflake.connector.pandas_tools import write_pandas
+from snowflake.connector.pandas_tools import pd_writer
 from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
 
 
@@ -14,12 +17,14 @@ class SnowflakeWriter(SnowflakeObject):
     sql_statement = str
     # used in as columns in create_snowflake method
     table_columns = []
+    # SQL Alchemy Engine
+    engine = None
 
     def __init__(self, df: pd.DataFrame):
         self.df = df
 
     def write_snowflake(self, database: str, schema: str, table: str, sf_username: str = None, sf_password: str = None,
-                        sf_account: str = None):
+                        sf_account: str = None, warehouse: str = None, role: str = None):
         """Uploads data from a pandas dataframe to an existing Snowflake table."""
 
         try:
@@ -32,13 +37,51 @@ class SnowflakeWriter(SnowflakeObject):
                              sf_account=sf_account
                              )
 
+            # create SQL Alchemy engine
+            if warehouse and not role:
+                self.engine = create_engine(URL(
+                    user=self.sf_credentials['user'],
+                    password=self.sf_credentials['pass'],
+                    account=self.sf_credentials['acct'],
+                    database=database,
+                    schema=schema,
+                    warehouse=warehouse
+                ))
+
+            elif role and not warehouse:
+                self.engine = create_engine(URL(
+                    user=self.sf_credentials['user'],
+                    password=self.sf_credentials['pass'],
+                    account=self.sf_credentials['acct'],
+                    database=database,
+                    schema=schema,
+                    role=role,
+                ))
+
+            elif role and warehouse:
+                self.engine = create_engine(URL(
+                    user=self.sf_credentials['user'],
+                    password=self.sf_credentials['pass'],
+                    account=self.sf_credentials['acct'],
+                    database=database,
+                    schema=schema,
+                    warehouse=warehouse,
+                    role=role
+                ))
+
+            else:
+                self.engine = create_engine(URL(
+                    user=self.sf_credentials['user'],
+                    password=self.sf_credentials['pass'],
+                    account=self.sf_credentials['acct'],
+                    database=database,
+                    schema=schema
+                ))
+
             # calls method to write data in a pandas dataframe to an existing Snowflake table
-            success, nchunks, nrows, _ = write_pandas(
-                        conn=self.connection,
-                        df=self.df,
-                        table_name=table
-                        )
-            self.write_success = success
+            self.df.to_sql(table, con=self.engine, index=False, if_exists='append', method=pd_writer)
+
+            self.write_success = True
 
         # catch and log error
         except Exception as e:
@@ -50,6 +93,7 @@ class SnowflakeWriter(SnowflakeObject):
             # close connection
             if self.connection:
                 self.connection.close()
+                self.engine.dispose()
 
         if self.write_success:
             self.log_message = f"Successfully wrote to the {table} Snowflake table"
