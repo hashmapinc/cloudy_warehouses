@@ -76,19 +76,12 @@ class SnowflakeObject:
 
     def get_snowflake_connection(self, user, pswd, acct, database=None, schema=None):
         """establishes a connection with snowflake"""
-        try:
-            self.connection = connector.connect(
-                user=user,
-                password=pswd,
-                account=acct,
-                database=database,
-                schema=schema
-            )
-
-        # catch and log error
-        except Exception as e:
-            self.log_message = e
-            self._logger.error(self.log_message)
-            return False
+        self.connection = connector.connect(
+            user=user,
+            password=pswd,
+            account=acct,
+            database=database,
+            schema=schema
+        )
 
         return True
