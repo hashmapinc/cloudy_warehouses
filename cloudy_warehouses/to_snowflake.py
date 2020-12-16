@@ -61,6 +61,6 @@ class SnowflakeWriter(SnowflakeObject):
 
         if self.write_success:
             self.log_message = f"Successfully wrote to the {table} Snowflake table"
-            self._logger.error(self.log_message)
+            self._logger.info(self.log_message)
             return True
 
