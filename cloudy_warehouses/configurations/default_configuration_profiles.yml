@@ -1,0 +1,7 @@
+# profile information to fill in for cloud warehouse providers
+profiles:
+  # Snowflake profile credentials
+  snowflake:
+    user: <your snowflake username>
+    pass: <your snowflake password>
+    acct: <your snowflake account>

@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/pandas-cloudy-extension.iml" filepath="$PROJECT_DIR$/.idea/pandas-cloudy-extension.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/pandas_cloud_extension.iml" filepath="$PROJECT_DIR$/.idea/pandas_cloud_extension.iml" />
+>>>>>>> bd05e6b980869c1d0488ab0e0f2c9c729cd842ba
     </modules>
   </component>
 </project>

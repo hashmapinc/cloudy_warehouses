@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.7 (pandas_cloud_extension)" project-jdk-type="Python SDK" />
+>>>>>>> bd05e6b980869c1d0488ab0e0f2c9c729cd842ba
 </project>
