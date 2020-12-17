@@ -29,7 +29,7 @@ The cloudy_warehouses pandas extension currently supports:
 
 **Installation**
 
-`pip install cloudy_warehouses`
+`pip install cloudy-warehouses`
 
 **Configuration** 
 
