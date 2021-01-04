@@ -5,3 +5,7 @@ profiles:
     user: <your snowflake username>
     pass: <your snowflake password>
     acct: <your snowflake account>
+    role: <your snowflake role>
+    warehouse: <your snowflake warehouse>
+    database: <your snowflake database>
+    schema: <your snowflake schema>

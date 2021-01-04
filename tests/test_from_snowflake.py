@@ -16,10 +16,10 @@ class TestReadSnowflake(unittest.TestCase):
                                                    })
                                                    )
 
-        self.assertIsInstance(mock_read_snowflake(database='a database', schema='a schema', table='a table'),
+        self.assertIsInstance(mock_read_snowflake(table='a table'),
                               pd.DataFrame)
 
-        mock_read_snowflake.assert_called_with(database='a database', schema='a schema', table='a table')
+        mock_read_snowflake.assert_called_with(table='a table')
 
     def test_list_snowflake(self):
 
@@ -30,6 +30,6 @@ class TestReadSnowflake(unittest.TestCase):
                                                    })
                                                    )
 
-        self.assertIsInstance(mock_list_snowflake(database='a database'), pd.DataFrame)
+        self.assertIsInstance(mock_list_snowflake(), pd.DataFrame)
 
-        mock_list_snowflake.assert_called_with(database='a database')
+        mock_list_snowflake.assert_called_with()
