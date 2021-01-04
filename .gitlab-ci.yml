@@ -1,0 +1,26 @@
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE
+
+stages:
+  - unittest
+  - coverage_test
+  - prod_deploy
+
+
+include:
+
+  - project: 'hashmapinc/ctso/internal_dry_repositories/docker_cicd'
+    ref: master
+    file: '/docker-build.gitlab-ci.yml'
+
+  - project: 'hashmapinc/ctso/internal_dry_repositories/project_management_cicd'
+    ref: master
+    file: '/unittest/unittest-python.gitlab-ci.yml'
+
+  - project: 'hashmapinc/ctso/internal_dry_repositories/project_management_cicd'
+    ref: master
+    file: '/unittest/coverage-test-python.gitlab-ci.yml'
+
+  - project: 'hashmapinc/ctso/internal_dry_repositories/project_management_cicd'
+    ref: master
+    file: '/pypi_package_deployments/prod-pypi-package-deploy.gitlab-ci.yml'
