@@ -12,12 +12,10 @@ class TestCopySnowflake(unittest.TestCase):
         # test for success
         mock_clone_snowflake = mock.create_autospec(pd.clone_snowflake, return_value=True)
 
-        self.assertEqual(mock_clone_snowflake(database='a database', schema='a schema',
-                                              new_table='a table', source_table='source table',
+        self.assertEqual(mock_clone_snowflake(new_table='a table', source_table='source table',
                                               source_schema='source schema'), True)
 
-        mock_clone_snowflake.assert_called_with(database='a database', schema='a schema',
-                                                new_table='a table', source_table='source table',
+        mock_clone_snowflake.assert_called_with(new_table='a table', source_table='source table',
                                                 source_schema='source schema')
 
         # test for failure
@@ -25,11 +23,11 @@ class TestCopySnowflake(unittest.TestCase):
 
         self.assertEqual(mock_clone_snowflake(database='a database', schema='a schema',
                                               new_table='a table', source_table='source table',
-                                              source_database='source database'), False)
+                                              source_database='source database', sf_warehouse='sf_warehouse'), False)
 
         mock_clone_snowflake.assert_called_with(database='a database', schema='a schema',
                                                 new_table='a table', source_table='source table',
-                                                source_database='source database')
+                                                source_database='source database', sf_warehouse='sf_warehouse')
 
     def test_clone_empty_snowflake(self):
 
@@ -37,19 +35,15 @@ class TestCopySnowflake(unittest.TestCase):
         mock_clone_snowflake = mock.create_autospec(pd.clone_empty_snowflake, return_value=True)
 
         self.assertEqual(mock_clone_snowflake(database='a database', schema='a schema',
-                                              new_table='a table', source_table='source table'), True)
+                                              new_table='a table', source_table='source table', sf_role='sf_role'), True)
 
         mock_clone_snowflake.assert_called_with(database='a database', schema='a schema',
-                                                new_table='a table', source_table='source table')
+                                                new_table='a table', source_table='source table', sf_role='sf_role')
 
         # test for failure
         mock_clone_snowflake = mock.create_autospec(pd.clone_empty_snowflake, return_value=False)
 
-        self.assertEqual(mock_clone_snowflake(database='a database', schema='a schema',
-                                              new_table='a table', source_table='source table',
-                                              source_database='source database'), False)
+        self.assertEqual(mock_clone_snowflake(new_table='a table', source_table='source table'), False)
 
-        mock_clone_snowflake.assert_called_with(database='a database', schema='a schema',
-                                                new_table='a table', source_table='source table',
-                                                source_database='source database')
+        mock_clone_snowflake.assert_called_with(new_table='a table', source_table='source table')
 
