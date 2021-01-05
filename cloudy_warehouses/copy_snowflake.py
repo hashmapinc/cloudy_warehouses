@@ -9,19 +9,19 @@ class SnowflakeCopier(SnowflakeObject):
     sql_statement = str
 
     def clone(self, new_table: str, source_table: str, source_schema: str = None, source_database: str = None,
-              database: str = None, schema: str = None, sf_username: str = None, sf_password: str = None,
-              sf_account: str = None, sf_role: str = None, sf_warehouse: str = None,):
+              database: str = None, schema: str = None, username: str = None, password: str = None,
+              account: str = None, role: str = None, warehouse: str = None):
         """method that creates a copy of a Snowflake table."""
         try:
             # initialize Snowflake connection and configure credentials
             self.initialize_snowflake(
                 database=database,
                 schema=schema,
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account,
-                sf_warehouse=sf_warehouse,
-                sf_role=sf_role
+                username=username,
+                password=password,
+                account=account,
+                warehouse=warehouse,
+                role=role
             )
 
             # build sql statement to be executed by the cursor object
@@ -72,8 +72,8 @@ class SnowflakeCopier(SnowflakeObject):
         return True
 
     def clone_empty(self, new_table: str, source_table: str, database: str = None, schema: str = None,
-                    source_database: str = None, source_schema: str = None, sf_username: str = None,
-                    sf_password: str = None, sf_account: str = None, sf_role: str = None, sf_warehouse: str = None):
+                    source_database: str = None, source_schema: str = None, username: str = None,
+                    password: str = None, account: str = None, role: str = None, warehouse: str = None):
         """method that creates an empty copy of a Snowflake table."""
 
         try:
@@ -81,11 +81,11 @@ class SnowflakeCopier(SnowflakeObject):
             self.initialize_snowflake(
                 database=database,
                 schema=schema,
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account,
-                sf_role=sf_role,
-                sf_warehouse=sf_warehouse
+                username=username,
+                password=password,
+                account=account,
+                role=role,
+                warehouse=warehouse
             )
 
             # build sql statement to be executed by the cursor object
