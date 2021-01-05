@@ -17,8 +17,8 @@ class SnowflakeWriter(SnowflakeObject):
     def __init__(self, df: pd.DataFrame):
         self.df = df
 
-    def write_snowflake(self, table: str, database: str = None, schema: str = None, sf_username: str = None,
-                        sf_password: str = None, sf_account: str = None, sf_role: str = None, sf_warehouse: str = None):
+    def write_snowflake(self, table: str, database: str = None, schema: str = None, username: str = None,
+                        password: str = None, account: str = None, role: str = None, warehouse: str = None):
         """Uploads data from a pandas dataframe to an existing Snowflake table."""
 
         try:
@@ -26,11 +26,11 @@ class SnowflakeWriter(SnowflakeObject):
             self.initialize_snowflake(
                              database=database,
                              schema=schema,
-                             sf_username=sf_username,
-                             sf_password=sf_password,
-                             sf_account=sf_account,
-                             sf_warehouse=sf_warehouse,
-                             sf_role=sf_role
+                             username=username,
+                             password=password,
+                             account=account,
+                             warehouse=warehouse,
+                             role=role
                              )
 
             # create SQL Alchemy engine

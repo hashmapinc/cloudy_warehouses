@@ -4,8 +4,8 @@ from cloudy_warehouses.snowflake_objects.snowflake_object import SnowflakeObject
 class SnowflakeReader(SnowflakeObject):
     """Contains read and list_tables methods."""
 
-    def read(self, table: str, sf_username: str = None, sf_password: str = None, sf_account: str = None,
-             database: str = None, schema: str = None, sf_role: str = None, sf_warehouse: str = None):
+    def read(self, table: str, username: str = None, password: str = None, account: str = None,
+             database: str = None, schema: str = None, role: str = None, warehouse: str = None):
         """reads a table from Snowflake and returns a pandas dataframe of that table."""
 
         try:
@@ -13,11 +13,11 @@ class SnowflakeReader(SnowflakeObject):
             self.initialize_snowflake(
                 database=database,
                 schema=schema,
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account,
-                sf_warehouse=sf_warehouse,
-                sf_role=sf_role
+                username=username,
+                password=password,
+                account=account,
+                warehouse=warehouse,
+                role=role
             )
 
             # calls function to return data in a Snowflake table as a pandas dataframe
@@ -47,18 +47,19 @@ class SnowflakeReader(SnowflakeObject):
         self._logger.info(self.log_message)
         return df
 
-    def list_tables(self, database: str = None, sf_username: str = None, sf_password: str = None, sf_account: str = None,
-                    sf_warehouse: str = None):
+    def list_tables(self, database: str = None, username: str = None, password: str = None, account: str = None,
+                    role: str = None, warehouse: str = None):
         """lists all tables in the specified Snowflake database. The list is returned as a pandas dataframe."""
 
         try:
             # configure and connect to Snowflake
             self.initialize_snowflake(
                 database=database,
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account,
-                sf_warehouse=sf_warehouse
+                username=username,
+                password=password,
+                account=account,
+                role=role,
+                warehouse=warehouse
             )
 
             # calls function to return data in a Snowflake table as a pandas dataframe
