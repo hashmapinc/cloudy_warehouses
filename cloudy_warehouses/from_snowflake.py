@@ -92,7 +92,7 @@ class SnowflakeReader(SnowflakeObject):
 
         # use warehouse if not None
         if warehouse:
-            self.cursor.execute(f"use warehouse {warehouse}")
+            self.cursor.execute(f"use warehouse {warehouse};")
 
         self.cursor.execute(f'select * from {database}.{schema}.{table}')
         df = self.cursor.fetch_pandas_all()
@@ -105,7 +105,7 @@ class SnowflakeReader(SnowflakeObject):
 
         # use warehouse if not None
         if warehouse:
-            self.cursor.execute(f"use warehouse {warehouse}")
+            self.cursor.execute(f"use warehouse {warehouse};")
 
         self.cursor.execute(
             f"SELECT TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME FROM {database}.INFORMATION_SCHEMA.TABLES;")

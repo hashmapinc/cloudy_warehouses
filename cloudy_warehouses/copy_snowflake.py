@@ -8,8 +8,8 @@ class SnowflakeCopier(SnowflakeObject):
     # sql that is run by the cursor object
     sql_statement = str
 
-    def clone(self, new_table: str, source_table: str, source_database: str = None, database: str = None,
-              schema: str = None, source_schema: str = None, sf_username: str = None, sf_password: str = None,
+    def clone(self, new_table: str, source_table: str, source_schema: str = None, source_database: str = None,
+              database: str = None, schema: str = None, sf_username: str = None, sf_password: str = None,
               sf_account: str = None, sf_role: str = None, sf_warehouse: str = None,):
         """method that creates a copy of a Snowflake table."""
         try:
@@ -49,7 +49,7 @@ class SnowflakeCopier(SnowflakeObject):
 
             # use warehouse if not None
             if self.sf_credentials['warehouse']:
-                self.cursor.execute(f"use warehouse {self.sf_credentials['warehouse']}")
+                self.cursor.execute(f"use warehouse {self.sf_credentials['warehouse']};")
 
             self.cursor.execute(self.sql_statement)
 
@@ -113,7 +113,7 @@ class SnowflakeCopier(SnowflakeObject):
 
             # use warehouse if not None
             if self.sf_credentials['warehouse']:
-                self.cursor.execute(f"use warehouse {self.sf_credentials['warehouse']}")
+                self.cursor.execute(f"use warehouse {self.sf_credentials['warehouse']};")
 
             self.cursor.execute(self.sql_statement)
 

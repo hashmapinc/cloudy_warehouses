@@ -46,11 +46,11 @@ class SnowflakeWriter(SnowflakeObject):
 
             # use warehouse if not None
             if self.sf_credentials['warehouse']:
-                self.connection.execute(f"use warehouse {self.sf_credentials['warehouse']}")
+                self.connection.execute(f"use warehouse {self.sf_credentials['warehouse']};")
 
             # use role if not None
             if self.sf_credentials['role']:
-                self.connection.execute(f"use role {self.sf_credentials['role']}")
+                self.connection.execute(f"use role {self.sf_credentials['role']};")
 
             # calls method to write data in a pandas dataframe to an existing Snowflake table
             # will create a new snowflake table if the given table name does not exist

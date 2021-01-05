@@ -49,7 +49,7 @@ class SnowflakeObject:
 
     def configure_credentials(self, sf_username: str = None, sf_password: str = None, sf_account: str = None,
                               sf_role: str = None, sf_warehouse: str = None, database: str = None, schema: str = None):
-        """configures default Snowflake credentials"""
+        """configures Snowflake credentials for session"""
 
         # Path to Snowflake credentials file
         __profile_path: str = os.path.join(os.getenv("CLOUDY_HOME"),
@@ -57,21 +57,25 @@ class SnowflakeObject:
         with open(__profile_path, 'r') as stream:
             self.sf_credentials = yaml.safe_load(stream)['profiles']['snowflake']
 
-        # overwrite default credentials with passed in credentials
+        # overwrite default credentials with passed in credentials if applicable
         if sf_username:
             self.sf_credentials['user'] = sf_username
         if sf_password:
             self.sf_credentials['pass'] = sf_password
         if sf_account:
             self.sf_credentials['acct'] = sf_account
-        if sf_role or self.sf_credentials['role'] == '<your snowflake role>':
-            self.sf_credentials['role'] = sf_role
-        if sf_warehouse or self.sf_credentials['warehouse'] == '<your snowflake warehouse>':
-            self.sf_credentials['warehouse'] = sf_warehouse
         if database:
             self.sf_credentials['database'] = database
         if schema:
             self.sf_credentials['schema'] = schema
+
+        # role is None if none is given or configured as default
+        if sf_role or self.sf_credentials['role'] == '<your snowflake role>':
+            self.sf_credentials['role'] = sf_role
+
+        # warehouse is None if none is given or configured as default
+        if sf_warehouse or self.sf_credentials['warehouse'] == '<your snowflake warehouse>':
+            self.sf_credentials['warehouse'] = sf_warehouse
 
         # checks if user has configured or passed credentials
         if self.sf_credentials['user'] == '<your snowflake username>' or self.sf_credentials['pass'] == \
