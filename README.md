@@ -106,18 +106,21 @@ This method returns all of the tables in a Snowflake database as a pandas DataFr
 
 ### Writing to a Snowflake table
 ```python
-pandas.DataFrame.cloudy_warehouses.write_snowflake(table: str, 
+pandas.DataFrame.cloudy_warehouses.write_snowflake(table: str,
                                                    database: str = None, 
                                                    schema: str = None, 
                                                    username: str = None,
                                                    password: str = None, 
                                                    account: str = None, 
                                                    role: str = None, 
-                                                   warehouse: str = None
+                                                   warehouse: str = None,
+                                                   overwrite: bool = False
                                                   )
 ```
 This method writes to a Snowflake table and informs you on success. This method works when writing to either an existing Snowflake table or a previously non-existing Snowflake table. 
-If the table that you provide does not exist, this method creates a new Snowflake table and writes to it. 
+If the table that you provide does not exist, this method creates a new Snowflake table and writes to it. If the table already exists, the DataFrame data is 
+appended to the existing table by default. If you would like to replace the table with the pandas DataFrame
+set `overwrite = True` when calling the method.
 
 ### Creating a clone of an existing Snowflake table
 ```python
@@ -226,7 +229,8 @@ df_to_write.cloudy_warehouses.write_snowflake(
     table='SNOWFLAKE_TABLE',
     username='my_snowflake_username',
     password='my_snowflake_password',
-    account='my_snowflake_account'
+    account='my_snowflake_account',
+    overwrite=True
 )
 
 df_read_from_snowflake = pd.read_snowflake(
@@ -241,6 +245,8 @@ df_read_from_snowflake = pd.read_snowflake(
 The arguments passed in here will be used instead of the default variables saved in the configuration file.
 For example, in last method called, the schema, username, password, account, and role are all passed in. However, this 
 method will use the default `database` variable because there is not one directly passed in.
+
+When the `write_snowflake` method is called in the above example, `overwrite=True`. This means that the Snowflake table being uploaded to will replace any existing data with the pandas DataFrame data.
 
 __Cloning and Empty Cloning (using optional Snowflake credentials arguments)__
 ```python
