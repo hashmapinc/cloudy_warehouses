@@ -11,7 +11,7 @@ setuptools.setup(
     description="Cloudy Warehouses allows for stream-lined interaction between pandas and cloud data platform providers",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/hashmapinc/sales-and-marketing/pocs/sam-kohlleffel-poc/pandas-cloudy-extension",
+    url="https://github.com/hashmapinc/oss/cloudy_warehouses",
     packages=setuptools.find_packages(),
     package_data={
         "cloudy_warehouses": ["configurations/default_configuration_profiles.yml"],
