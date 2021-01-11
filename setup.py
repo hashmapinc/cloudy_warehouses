@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cloudy_warehouses",
-    version="0.0.4.3",
+    version="0.1.9.9",
     author="Hashmap, Inc",
     author_email="accelerators@hashmapinc.com",
-    description="Cloudy Warehouses allows for stream-lined interaction between pandas and cloud data platform providers",
+    description="Cloudy Warehouses allows for stream-lined interaction between pandas and cloud data platform providers.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/hashmapinc/oss/cloudy_warehouses",
@@ -29,7 +29,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
-        "Development Status :: 3 - Alpha"
+        "Development Status :: 4 - Beta"
     ],
     python_requires='>=3.7',
 )
