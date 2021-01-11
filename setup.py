@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cloudy_warehouses",
-    version="0.1.9.9",
+    version="0.1.0.0",
     author="Hashmap, Inc",
     author_email="accelerators@hashmapinc.com",
     description="Cloudy Warehouses allows for stream-lined interaction between pandas and cloud data platform providers.",
