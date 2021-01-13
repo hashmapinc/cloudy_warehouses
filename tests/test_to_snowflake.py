@@ -14,10 +14,10 @@ class TestWriteSnowflake(unittest.TestCase):
         mock_write_snowflake = mock.create_autospec(df.cloudy_warehouses.write_snowflake, return_value=True)
 
         self.assertEqual(mock_write_snowflake(database='a database', schema='a schema', table='a table',
-                                              sf_username='a name', sf_password='a pass', sf_account='an account',
-                                              sf_warehouse='sf_warehouse', sf_role='sf_role'),
+                                              username='a name', password='a pass', account='an account',
+                                              warehouse='warehouse', role='role'),
                          True)
 
         mock_write_snowflake.assert_called_with(database='a database', schema='a schema', table='a table',
-                                                sf_username='a name', sf_password='a pass', sf_account='an account',
-                                                sf_warehouse='sf_warehouse', sf_role='sf_role')
+                                                username='a name', password='a pass', account='an account',
+                                                warehouse='warehouse', role='role')

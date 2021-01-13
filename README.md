@@ -51,85 +51,112 @@ profiles:
     user: <your snowflake username>
     pass: <your snowflake password>
     acct: <your snowflake account>
+    role: <your snowflake role>
+    warehouse: <your snowflake warehouse>
+    database: <your snowflake database>
+    schema: <your snowflake schema>
 ```
-The user, pass, and acct values all need to be filled in with your Snowflake credentials.
+The user, pass, acct, database, schema, values all should be filled in with your desired Snowflake credentials and connection details. The variables in this
+file serve as default arguments when calling a cloudy_warehouses method. Role and warehouse can be filled in as well, but they are optional arguments when connecting to Snowflake.
 
 
 
 ## API
 The intent has been to keep the API as simple as possible by minimally extending the pandas API and supporting, for the most part, the same functionality.
 
+### Optional Arguments
+There are two methods for passing optional arguments into a method.
+1. The configuration file
+2. Directly pass in the arguments when calling the method
+
+The variables saved in the configuration file serve as default arguments for the methods to use.
+However, you tell the method to use different credentials by passing in arguments directly. The method will use the passed in arguments 
+instead of the default arguments saved in `configuration_profiles.yml`. 
+
+For example, if I had the `database` variable saved in the `configuration_profiles.yml` as `database_1`, but passed in `database = database_2` directly into the method,
+the method would use `database_2` instead of `database_1`. 
+
+However, if I choose to not directly pass a `database` argument in, the method will use the 
+`database_1` because it is the default. The passed in arguments take priority over the default variables saved in `configuration_profiles.yml`.
 ### Reading a from a Snowflake table
 ```python
-pandas.read_snowflake(database: str, 
-                      schema: str, 
-                      table: str, 
-                      sf_username: str = None, 
-                      sf_password: str = None, 
-                      sf_account: str = None
-                      )
+pandas.read_snowflake(table: str, 
+                      username: str = None, 
+                      password: str = None, 
+                      account: str = None,
+                      database: str = None, 
+                      schema: str = None, 
+                      role: str = None, 
+                      warehouse: str = None
+                     )
 ```
-This method reads from a Snowflake table and returns the data in said tables as a pandas DataFrame. This method uses your Snowflake credentials stored in the configuration file.
-However, you can pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake as well.
+This method reads from a Snowflake table and returns the data in said tables as a pandas DataFrame.
 
 ### Listing all tables in a Snowflake database
 ```python
-pandas.list_snowflake_tables(database: str, 
-                             sf_username: str = None, 
-                             sf_password: str = None, 
-                             sf_account: str = None
-                             )
+pandas.list_snowflake_tables(database: str = None, 
+                             username: str = None, 
+                             password: str = None, 
+                             account: str = None,
+                             role: str = None, 
+                             warehouse: str = None
+                            )
 ```
 This method returns all of the tables in a Snowflake database as a pandas DataFrame. 
-There is an option to pass arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
 ### Writing to a Snowflake table
 ```python
-pandas.DataFrame.cloudy_warehouses.write_snowflake(database: str,
-                                                   schema: str, 
-                                                   table: str, 
-                                                   sf_username: str=None, 
-                                                   sf_password: str=None, 
-                                                   sf_account: str=None
-                                                   )
+pandas.DataFrame.cloudy_warehouses.write_snowflake(table: str,
+                                                   database: str = None, 
+                                                   schema: str = None, 
+                                                   username: str = None,
+                                                   password: str = None, 
+                                                   account: str = None, 
+                                                   role: str = None, 
+                                                   warehouse: str = None,
+                                                   overwrite: bool = False
+                                                  )
 ```
 This method writes to a Snowflake table and informs you on success. This method works when writing to either an existing Snowflake table or a previously non-existing Snowflake table. 
-If the table that you provide does not exist, this method creates a new Snowflake table and writes to it. 
-Like the read_snowflake method, write_snowflake uses your Snowflake credentials stored in the configuration file.
-However, you can pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake as well.
+If the table that you provide does not exist, this method creates a new Snowflake table and writes to it. If the table already exists, the DataFrame data is 
+appended to the existing table by default. If you would like to replace the table with the pandas DataFrame
+set `overwrite = True` when calling the method.
 
 ### Creating a clone of an existing Snowflake table
 ```python
-pandas.clone_snowflake(database: str,
-                       schema: str,
-                       new_table: str,
-                       source_table: str,
-                       source_schema: str = None,
+pandas.clone_snowflake(new_table: str, 
+                       source_table: str, 
+                       source_schema: str = None, 
                        source_database: str = None,
-                       sf_username: str = None,
-                       sf_password: str = None,
-                       sf_account: str = None
-                       )           
+                       database: str = None, 
+                       schema: str = None, 
+                       username: str = None, 
+                       password: str = None,
+                       account: str = None, 
+                       role: str = None, 
+                       warehouse: str = None
+                      )           
 ```
 This method creates a clone of an existing Snowflake table. The `new_table` variable is the new table that will
 be created after the method is called. The `source_table` variable is the existing Snowflake table that is being cloned.
 The optional `source_database` and `source_schema` variables are the database and schema in which the `source_table` resides.
 If you plan to clone an existing table from the schema and database that the `new_table` will reside in, you do not need to 
 include `source_database` and `source_schema` variables.
-You can use the configuration file or pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
 ### Creating an empty clone of an existing Snowflake table
 ```python
-pandas.clone_empty_snowflake(database: str,
-                             schema: str,
-                             new_table: str,
+pandas.clone_empty_snowflake(new_table: str, 
                              source_table: str,
+                             source_database: str = None, 
                              source_schema: str = None,
-                             source_database: str = None,
-                             sf_username: str = None,
-                             sf_password: str = None,
-                             sf_account: str = None
-                             )           
+                             database: str = None, 
+                             schema: str = None,
+                             username: str = None,
+                             password: str = None, 
+                             account: str = None, 
+                             role: str = None, 
+                             warehouse: str = None
+                            )           
 ```
 This method creates an empty clone of an existing Snowflake table. This means that of the columns from the `source_table`
 are copied into the `new_table`, but the `new_table` does not have any data within its columns. The `new_table` variable is the new table that will
@@ -137,7 +164,6 @@ be created after the method is called. The `source_table` variable is the existi
 The optional `source_database` and `source_schema` variables are the database and schema in which the `source_table` resides.
 If you plan to clone an existing table from the schema and database that the `new_table` will reside in, you do not need to 
 include `source_database` and `source_schema` variables.
-You can use the configuration file or pass optional arguments (sf_username, sf_password, sf_account) to connect to Snowflake.
 
 ## Examples
 
@@ -146,22 +172,16 @@ __Reading, Writing, and Listing (using configuration file)__
 import pandas as pd 
 import cloudy_warehouses
 
-pd.list_snowflake_tables(database='SNOWFLAKE_DATABASE')
+pd.list_snowflake_tables(role='SNOWFLAKE_ROLE')
 
 df_to_write = pd.DataFrame.from_dict({'a': [1, 2, 3], 'b': [2, 3, 5]})
 
-df_to_write.cloudy_warehouses.write_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA', 
-    table='SNOWFLAKE_TABLE'
-    )
+df_to_write.cloudy_warehouses.write_snowflake(table='SNOWFLAKE_TABLE', role='SNOWFLAKE_ROLE')
 
-df_read_from_snowflake = pd.read_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA', 
-    table='SNOWFLAKE_TABLE'
-    )
+df_read_from_snowflake = pd.read_snowflake(table='SNOWFLAKE_TABLE', role='SNOWFLAKE_ROLE')
 ```
+The methods called in this example use the `database`, `schema`, `warehouse`, and account credentials stored in `configuration_profiles.yml`.
+However, the `role` is directly passed in and therefore overwrites the default `role` saved in the configuraiton file.
 
 __Cloning and Empty Cloning (using configuration file)__
 ```python
@@ -171,55 +191,62 @@ import cloudy_warehouses
 df = pd.DataFrame.from_dict({'COL_1': ['hello', 'there'], 'COL_2': [10, 20], 'COL_3': [10, 20]})
 
 pd.clone_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA',
     new_table='SNOWFLAKE_TABLE',
     source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
     source_schema='SNOWFLAKE_SCHEMA_THAT_HOLDS_THE_SOURCE_TABLE'
     )
 
 pd.clone_empty_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA',
     new_table='SNOWFLAKE_TABLE',
     source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
     source_schema='SNOWFLAKE_SCHEMA_THAT_HOLDS_THE_SOURCE_TABLE',
     source_database='SNOWFLAKE_DATABASE_THAT_HOLDS_THE_SOURCE_SCHEMA'
     )
 ```
+The methods called in this example use the `database`, `schema`, `warehouse`, `role` and account credentials stored in `configuration_profiles.yml`.
+The newly cloned table will be saved in the default `database` and `schema` in the configuration file.
 
 __Reading, Writing, and Listing (using optional Snowflake credentials arguments)__
+
 ```python
 import pandas as pd
 import cloudy_warehouses
 
 pd.list_snowflake_tables(
-    database='SNOWFLAKE_DATABASE', 
-    sf_username='my_snowflake_username', 
-    sf_password='my_snowflake_password', 
-    sf_account='my_snowflake_account'
-    )
+    database='SNOWFLAKE_DATABASE',
+    username='my_snowflake_username',
+    password='my_snowflake_password',
+    account='my_snowflake_account',
+    warehouse='my_snowflake_warehouse',
+    role='my_snowflake_role'
+)
 
 df_to_write = pd.DataFrame.from_dict({'a': [1, 2, 3], 'b': [2, 3, 5]})
 
 df_to_write.cloudy_warehouses.write_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA', 
-    table='SNOWFLAKE_TABLE', 
-    sf_username='my_snowflake_username', 
-    sf_password='my_snowflake_password', 
-    sf_account='my_snowflake_account'
-    )
+    database='SNOWFLAKE_DATABASE',
+    schema='SNOWFLAKE_SCHEMA',
+    table='SNOWFLAKE_TABLE',
+    username='my_snowflake_username',
+    password='my_snowflake_password',
+    account='my_snowflake_account',
+    overwrite=True
+)
 
 df_read_from_snowflake = pd.read_snowflake(
-    database='SNOWFLAKE_DATABASE', 
-    schema='SNOWFLAKE_SCHEMA', 
-    table='SNOWFLAKE_TABLE', 
-    sf_username='my_snowflake_username', 
-    sf_password='my_snowflake_password', 
-    sf_account='my_snowflake_account'
-    )
+    schema='SNOWFLAKE_SCHEMA',
+    table='SNOWFLAKE_TABLE',
+    username='my_snowflake_username',
+    password='my_snowflake_password',
+    account='my_snowflake_account',
+    role='my_snowflake_role'
+)
 ```
+The arguments passed in here will be used instead of the default variables saved in the configuration file.
+For example, in last method called, the schema, username, password, account, and role are all passed in. However, this 
+method will use the default `database` variable because there is not one directly passed in.
+
+When the `write_snowflake` method is called in the above example, `overwrite=True`. This means that the Snowflake table being uploaded to will replace any existing data with the pandas DataFrame data.
 
 __Cloning and Empty Cloning (using optional Snowflake credentials arguments)__
 ```python
@@ -235,9 +262,11 @@ pd.clone_snowflake(
     source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
     source_schema='SNOWFLAKE_SCHEMA_THAT_HOLDS_THE_SOURCE_TABLE',
     source_database='SNOWFLAKE_DATABASE_THAT_HOLDS_THE_SOURCE_SCHEMA',
-    sf_username='my_snowflake_username', 
-    sf_password='my_snowflake_password', 
-    sf_account='my_snowflake_account'
+    username='my_snowflake_username', 
+    password='my_snowflake_password', 
+    account='my_snowflake_account',
+    warehouse='my_snowflake_warehouse',
+    role='my_snowflake_role'
     )
 
 pd.clone_empty_snowflake(
@@ -245,8 +274,8 @@ pd.clone_empty_snowflake(
     schema='SNOWFLAKE_SCHEMA',
     new_table='SNOWFLAKE_TABLE',
     source_table='SNOWFLAKE_TABLE_TO_BE_CLONED',
-    sf_username='my_snowflake_username', 
-    sf_password='my_snowflake_password', 
-    sf_account='my_snowflake_account'
+    username='my_snowflake_username', 
+    password='my_snowflake_password', 
+    account='my_snowflake_account'
     )
 ```

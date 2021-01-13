@@ -21,18 +21,18 @@ class SnowflakeObject:
     # log message
     log_message = str
 
-    def initialize_snowflake(self, database: str = None, schema: str = None, sf_username: str = None, sf_password: str = None,
-                             sf_account: str = None, sf_role: str = None, sf_warehouse: str = None):
+    def initialize_snowflake(self, database: str = None, schema: str = None, username: str = None, password: str = None,
+                             account: str = None, role: str = None, warehouse: str = None):
         """method that creates Snowflake connection and configures Snowflake credentials"""
 
         if not self.initialized:
             # calls method to configure Snowflake credentials
             self.configure_credentials(
-                sf_username=sf_username,
-                sf_password=sf_password,
-                sf_account=sf_account,
-                sf_role=sf_role,
-                sf_warehouse=sf_warehouse,
+                username=username,
+                password=password,
+                account=account,
+                role=role,
+                warehouse=warehouse,
                 database=database,
                 schema=schema
             )
@@ -47,8 +47,8 @@ class SnowflakeObject:
 
         self.initialized = True
 
-    def configure_credentials(self, sf_username: str = None, sf_password: str = None, sf_account: str = None,
-                              sf_role: str = None, sf_warehouse: str = None, database: str = None, schema: str = None):
+    def configure_credentials(self, username: str = None, password: str = None, account: str = None,
+                              role: str = None, warehouse: str = None, database: str = None, schema: str = None):
         """configures Snowflake credentials for session"""
 
         # Path to Snowflake credentials file
@@ -58,24 +58,24 @@ class SnowflakeObject:
             self.sf_credentials = yaml.safe_load(stream)['profiles']['snowflake']
 
         # overwrite default credentials with passed in credentials if applicable
-        if sf_username:
-            self.sf_credentials['user'] = sf_username
-        if sf_password:
-            self.sf_credentials['pass'] = sf_password
-        if sf_account:
-            self.sf_credentials['acct'] = sf_account
+        if username:
+            self.sf_credentials['user'] = username
+        if password:
+            self.sf_credentials['pass'] = password
+        if account:
+            self.sf_credentials['acct'] = account
         if database:
             self.sf_credentials['database'] = database
         if schema:
             self.sf_credentials['schema'] = schema
 
         # role is None if none is given or configured as default
-        if sf_role or self.sf_credentials['role'] == '<your snowflake role>':
-            self.sf_credentials['role'] = sf_role
+        if role or self.sf_credentials['role'] == '<your snowflake role>':
+            self.sf_credentials['role'] = role
 
         # warehouse is None if none is given or configured as default
-        if sf_warehouse or self.sf_credentials['warehouse'] == '<your snowflake warehouse>':
-            self.sf_credentials['warehouse'] = sf_warehouse
+        if warehouse or self.sf_credentials['warehouse'] == '<your snowflake warehouse>':
+            self.sf_credentials['warehouse'] = warehouse
 
         # checks if user has configured or passed credentials
         if self.sf_credentials['user'] == '<your snowflake username>' or self.sf_credentials['pass'] == \
