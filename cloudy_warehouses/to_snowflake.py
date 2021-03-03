@@ -22,6 +22,7 @@ class SnowflakeWriter(SnowflakeObject):
         """Uploads data from a pandas dataframe to an existing Snowflake table."""
 
         try:
+            self.df.columns = map(str.upper, self.df.columns)
             # initialize Snowflake connection and configure credentials
             self.initialize_snowflake(
                              database=database,
