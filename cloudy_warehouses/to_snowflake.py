@@ -62,7 +62,7 @@ class SnowflakeWriter(SnowflakeObject):
                 else:
                     self.df.to_sql(name=table, con=self.engine, index=False, if_exists='replace', method=pd_writer)
             except Exception:
-                self.df.columns = map(str.upper, self.df.columns)
+                self.df.columns = map(str.lower, self.df.columns)
                 if not overwrite:
                     self.df.to_sql(name=table, con=self.engine, index=False, if_exists='append', method=pd_writer)
 
