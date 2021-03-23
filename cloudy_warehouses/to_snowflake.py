@@ -54,11 +54,20 @@ class SnowflakeWriter(SnowflakeObject):
 
             # calls method to write data in a pandas dataframe to an existing Snowflake table
             # will create a new snowflake table if the given table name does not exist
-            if not overwrite:
-                self.df.to_sql(name=table, con=self.engine, index=False, if_exists='append', method=pd_writer)
+            try:
+                self.df.columns = map(str.upper, self.df.columns)
+                if not overwrite:
+                    self.df.to_sql(name=table, con=self.engine, index=False, if_exists='append', method=pd_writer)
 
-            else:
-                self.df.to_sql(name=table, con=self.engine, index=False, if_exists='replace', method=pd_writer)
+                else:
+                    self.df.to_sql(name=table, con=self.engine, index=False, if_exists='replace', method=pd_writer)
+            except Exception:
+                self.df.columns = map(str.lower, self.df.columns)
+                if not overwrite:
+                    self.df.to_sql(name=table, con=self.engine, index=False, if_exists='append', method=pd_writer)
+
+                else:
+                    self.df.to_sql(name=table, con=self.engine, index=False, if_exists='replace', method=pd_writer)
 
             self.write_success = True
 
